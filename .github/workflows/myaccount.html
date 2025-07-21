@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Account</title>
+  <style>
+    body {
+      font-family: 'SolaimanLipi', sans-serif;
+      background: url('images/login3.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 95%;
+    }
+
+    .profile-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    #profileImage {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #4CAF50;
+      cursor: pointer;
+    }
+
+    #upload {
+      display: none;
+    }
+
+    .user-name {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .balance {
+      font-size: 16px;
+      color: #444;
+      margin-top: 4px;
+    }
+
+    .info {
+      text-align: left;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-top: 15px;
+    }
+
+    .info p {
+      margin: 6px 0;
+      font-size: 16px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 6px;
+      font-size: 15px;
+      border: none;
+      background-color: transparent;
+      border-bottom: 1px solid #ccc;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-bottom: 1px solid #4CAF50;
+    }
+
+    .footer-btns {
+      margin-top: 30px;
+    }
+
+    .footer-btns button {
+      padding: 10px 18px;
+      margin: 5px;
+      font-size: 15px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    .user-id {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-section">
+      <label for="upload">
+        <img id="profileImage" src="https://via.placeholder.com/100" alt="Profile Picture" />
+      </label>
+      <div>
+        <div class="user-name" id="userName">আমার অ্যাকাউন্ট</div>
+        <div class="balance">
+          <span class="invest-balance">📦 ইনভেস্ট: <span id="investBalance">৳0</span></span><br>
+          💰 ব্যালান্স: <span id="accountBalance">৳0</span>
+        </div>
+      </div>
+    </div>
+
+    <input type="file" id="upload" accept="image/*" />
+
+    <div class="user-id">
+      🆔 ইউজার আইডি: <span id="userId">Loading...</span>
+    </div>
+
+    <div class="info">
+      <p><strong>👤 নাম:</strong> <input type="text" id="editName" /></p>
+      <p><strong>📱 ফোন:</strong> <input type="text" id="editPhone" /></p>
+      <p><strong>📧 ইমেইল:</strong> <input type="text" id="editEmail" /></p>
+      <p><strong>🎂 বয়স:</strong> <input type="text" id="editAge" /></p>
+    </div>
+
+    <div class="footer-btns">
+      <button onclick="logout()">🚪 লগআউট</button>
+      <button onclick="goHome()">🏠 হোমে ফিরে যান</button>
+    </div>
+  </div>
+
+  <script>
+    // প্রোফাইল ছবি লোড এবং সেভ
+    const savedImage = localStorage.getItem("profileImage");
+    if (savedImage) {
+      document.getElementById("profileImage").src = savedImage;
+    }
+
+    document.getElementById("upload").addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("profileImage").src = e.target.result;
+          localStorage.setItem("profileImage", e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // ইউজার ডাটা লোড করা
+    function loadUserData() {
+      const name = localStorage.getItem("registeredName") || "";
+      const phone = localStorage.getItem("registeredPhone") || "";
+      const email = localStorage.getItem("registeredEmail") || "";
+      const age = localStorage.getItem("registeredAge") || "";
+      const userId = localStorage.getItem("registeredUserId") || "নেই";
+      const accountBalance = parseFloat(localStorage.getItem("accountBalance")) || 0;
+      let investBalance = parseFloat(localStorage.getItem("investBalance")) || 0;
+
+      // home.html থেকে কেনা প্যাকেজের টাকা যোগ করার লজিক
+      const lastPurchasedAmount = parseFloat(localStorage.getItem("lastPurchasedAmount")) || 0;
+      if (lastPurchasedAmount > 0) {
+        investBalance += lastPurchasedAmount;
+        localStorage.setItem("investBalance", investBalance);
+        localStorage.removeItem("lastPurchasedAmount");
+        localStorage.removeItem("lastPurchasedName");
+      }
+
+      document.getElementById("editName").value = name;
+      document.getElementById("editPhone").value = phone;
+      document.getElementById("editEmail").value = email;
+      document.getElementById("editAge").value = age;
+      document.getElementById("userName").innerText = name || "আমার অ্যাকাউন্ট";
+      document.getElementById("userId").innerText = userId;
+      document.getElementById("accountBalance").innerText = `৳${accountBalance.toFixed(2)}`;
+      document.getElementById("investBalance").innerText = `৳${investBalance.toFixed(2)}`;
+    }
+
+    // ইউজার ডাটা সেভ করা
+    function saveUserData() {
+      localStorage.setItem("registeredName", document.getElementById("editName").value);
+      localStorage.setItem("registeredPhone", document.getElementById("editPhone").value);
+      localStorage.setItem("registeredEmail", document.getElementById("editEmail").value);
+      localStorage.setItem("registeredAge", document.getElementById("editAge").value);
+      document.getElementById("userName").innerText = document.getElementById("editName").value;
+    }
+
+    // ইনপুট পরিবর্তন হলে সেভ হবে
+    ["editName", "editPhone", "editEmail", "editAge"].forEach(id => {
+      document.getElementById(id).addEventListener("input", saveUserData);
+    });
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+
+    function goHome() {
+      window.location.href = "main-home-page.html";
+    }
+
+    loadUserData();
+  </script>
+</body>
+</html>

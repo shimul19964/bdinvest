@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Confirmation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #e1bee7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+      background-image: url('images/bdtaka.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #4a148c;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
+
+    .scrolling-text {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+      border-bottom: 2px solid #ccc;
+      margin-bottom: 20px;
+      padding-bottom: 5px;
+    }
+
+    .scrolling-text p {
+      display: inline-block;
+      animation: scroll-left 10s linear infinite;
+      color: #d81b60;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .payment-option {
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 15px;
+      transition: transform 0.2s ease;
+    }
+
+    .payment-option:hover {
+      transform: scale(1.02);
+      background-color: #e0e0e0;
+    }
+
+    .payment-option img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-right: 10px;
+    }
+
+    .payment-info h3 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 4px;
+      text-align: left;
+    }
+
+    .payment-info p {
+      font-size: 16px;
+      color: #555;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border: 1.5px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .back-button {
+      background-color: #555;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="scrolling-text">
+    <p>নিচের প্রদত্ত নম্বরে Send Money করুন ।।</p>
+  </div>
+
+  <h2>পেমেন্ট অপশন</h2>
+
+  <div class="payment-option">
+    <img src="images/bikash.png" alt="bKash Logo">
+    <div class="payment-info">
+      <h3>bKash</h3>
+      <p>নম্বর: 01939483079</p>
+    </div>
+  </div>
+
+  <div class="payment-option">
+    <img src="images/Rocket.jpg" alt="Rocket Logo">
+    <div class="payment-info">
+      <h3>Rocket</h3>
+      <p>নম্বর: 019394830799</p>
+    </div>
+  </div>
+
+  <div class="payment-option">
+    <img src="images/Nagod.png" alt="Nagad Logo">
+    <div class="payment-info">
+      <h3>Nagad</h3>
+      <p>নম্বর: 01939483079</p>
+    </div>
+  </div>
+
+  <!-- ✅ Amount Input -->
+  <label for="amount">Amount (টাকা):</label>
+  <input type="number" id="amount" name="amount" placeholder="Enter Amount" required>
+
+  <!-- ✅ Submit Button -->
+  <button onclick="addToBalance()">💰 ইনভেস্ট ব্যালান্সে টাকা যুক্ত করুন</button>
+
+  <!-- 🔙 Back Button -->
+  <button class="back-button" onclick="goBack()">⏪ নির্ধারিত ফরম এ গিয়ে আপনার রিচার্জ এর তথ্য জমা দিন</button>
+</div>
+
+<!-- ✅ Script -->
+<script>
+  function addToBalance() {
+    const amount = parseFloat(document.getElementById("amount").value);
+    if (!isNaN(amount) && amount > 0) {
+      let currentBalance = parseFloat(localStorage.getItem("investBalance")) || 0;
+      const newBalance = currentBalance + amount;
+      localStorage.setItem("investBalance", newBalance.toFixed(2));
+
+      alert("✅ পেমেন্ট সফলভাবে সম্পন্ন হয়েছে!");
+      window.location.href = "main-home-page.html"; // ✅ রিডাইরেক্ট হবে main-home-page.html এ
+    } else {
+      alert("⚠️ দয়া করে সঠিক পরিমাণ টাকা লিখুন।");
+    }
+  }
+
+  function goBack() {
+    // 🔗 ইউজারকে গুগল ফর্মে রিডাইরেক্ট করবে
+    window.location.href = "https://forms.gle/2WoKGt5vKdZ5GspK6";
+  }
+</script>
+
+</body>
+</html>

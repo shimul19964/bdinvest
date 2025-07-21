@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <title>লগইন / রেজিস্ট্রেশন</title>
+  <style>
+    body {
+      font-family: 'SolaimanLipi', sans-serif;
+      background: #f1f1f1;
+      padding: 20px;
+      max-width: 480px;
+      margin: auto;
+    }
+    h2 { text-align: center; color: #FFFFFF; }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+    .message {
+      padding: 10px;
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      margin-top: 10px;
+      border-radius: 6px;
+    }
+    .toggle-link {
+      color: blue;
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- Login Form -->
+<div id="login-form">
+  <h2>লগইন</h2>
+  <label for="login-phone">ফোন নম্বর</label>
+  <input type="tel" id="login-phone" placeholder="ফোন নম্বর লিখুন" />
+  <div id="login-phone-error" class="error"></div>
+
+  <label for="login-password">পাসওয়ার্ড</label>
+  <input type="password" id="login-password" placeholder="পাসওয়ার্ড লিখুন" />
+  <div id="login-password-error" class="error"></div>
+
+  <button onclick="login()">লগইন</button>
+  <div class="toggle-link" onclick="showRegistration()">রেজিস্ট্রেশন করুন</div>
+  <div class="toggle-link" onclick="showForgotPassword()">পাসওয়ার্ড ভুলে গেছেন?</div>
+</div>
+
+<!-- Registration Form -->
+<div id="registration-form" class="hidden">
+  <h2>রেজিস্ট্রেশন</h2>
+  <label for="reg-name">নাম</label>
+  <input type="text" id="reg-name" placeholder="আপনার নাম লিখুন" />
+  <label for="reg-phone">ফোন নম্বর</label>
+  <input type="tel" id="reg-phone" placeholder="ফোন নম্বর লিখুন" />
+  <label for="reg-email">ইমেইল</label>
+  <input type="email" id="reg-email" placeholder="ইমেইল লিখুন" />
+  <label for="reg-age">বয়স</label>
+  <input type="number" id="reg-age" placeholder="বয়স লিখুন" min="10" max="120" />
+  <label for="reg-password">পাসওয়ার্ড</label>
+  <input type="password" id="reg-password" placeholder="পাসওয়ার্ড দিন" />
+  <label for="reg-confirm-password">পুনরায় পাসওয়ার্ড</label>
+  <input type="password" id="reg-confirm-password" placeholder="আবার পাসওয়ার্ড দিন" />
+  <label for="reg-referral">রেফারেল কোড (ঐচ্ছিক)</label>
+  <input type="text" id="reg-referral" placeholder="রেফারেল কোড দিন" />
+  
+  <button onclick="sendOtp()">OTP পাঠান</button>
+
+  <div id="otp-section" class="hidden">
+    <label for="reg-otp">OTP কোড</label>
+    <input type="number" id="reg-otp" placeholder="৪ ডিজিট কোড লিখুন" />
+    <button onclick="verifyOtp()">ভেরিফাই করুন</button>
+  </div>
+
+  <div class="toggle-link" onclick="showLogin()">আগে লগইন করুন</div>
+</div>
+
+<!-- Forget Password Form -->
+<div id="forgot-form" class="hidden">
+  <h2>পাসওয়ার্ড রিসেট</h2>
+  <label for="forgot-phone">ফোন নম্বর</label>
+  <input type="tel" id="forgot-phone" placeholder="রেজিস্টার করা ফোন নম্বর দিন" />
+
+  <label for="new-password">নতুন পাসওয়ার্ড</label>
+  <input type="password" id="new-password" placeholder="নতুন পাসওয়ার্ড দিন" />
+
+  <label for="confirm-new-password">পুনরায় পাসওয়ার্ড</label>
+  <input type="password" id="confirm-new-password" placeholder="আবার পাসওয়ার্ড দিন" />
+
+  <button onclick="resetPassword()">পাসওয়ার্ড রিসেট করুন</button>
+  <div class="toggle-link" onclick="showLogin()">লগইনে ফিরে যান</div>
+</div>
+
+<div id="success-message" class="message hidden">
+  ✅ সফলভাবে রেজিস্ট্রেশন সম্পন্ন হয়েছে!
+</div>
+
+<script>
+  let generatedOtp = null;
+
+  function showRegistration() {
+    document.getElementById("login-form").classList.add("hidden");
+    document.getElementById("forgot-form").classList.add("hidden");
+    document.getElementById("registration-form").classList.remove("hidden");
+  }
+
+  function showLogin() {
+    document.getElementById("registration-form").classList.add("hidden");
+    document.getElementById("forgot-form").classList.add("hidden");
+    document.getElementById("login-form").classList.remove("hidden");
+    document.getElementById("success-message").classList.add("hidden");
+  }
+
+  function showForgotPassword() {
+    document.getElementById("login-form").classList.add("hidden");
+    document.getElementById("registration-form").classList.add("hidden");
+    document.getElementById("forgot-form").classList.remove("hidden");
+  }
+
+  function sendOtp() {
+    const phone = document.getElementById("reg-phone").value;
+    const password = document.getElementById("reg-password").value;
+    const confirm = document.getElementById("reg-confirm-password").value;
+
+    if (phone.length < 10 || password.length < 4 || password !== confirm) {
+      alert("সঠিকভাবে সব তথ্য দিন!");
+      return;
+    }
+
+    generatedOtp = Math.floor(1000 + Math.random() * 9000);
+    alert("আপনার OTP: " + generatedOtp);
+
+    document.getElementById("otp-section").classList.remove("hidden");
+    // অটো ইউজার আইডি তৈরি
+let lastId = localStorage.getItem("lastUserId") || "BI19960000";
+let nextIdNum = parseInt(lastId.slice(2)) + 1;
+let newUserId = "BI" + nextIdNum.toString().padStart(8, "0");
+
+localStorage.setItem("registeredUserId", newUserId); // ইউজার আইডি সেভ
+localStorage.setItem("lastUserId", newUserId); // পরবর্তী আইডির জন্য আপডেট
+
+  }
+
+  function verifyOtp() {
+    const userOtp = document.getElementById("reg-otp").value;
+    if (userOtp == generatedOtp) {
+      alert("OTP মিলেছে! 🎉");
+      document.getElementById("success-message").classList.remove("hidden");
+
+      localStorage.setItem("registeredPhone", document.getElementById("reg-phone").value);
+      localStorage.setItem("registeredPassword", document.getElementById("reg-password").value);
+      localStorage.setItem("registeredName", document.getElementById("reg-name").value);
+
+      showLogin();
+    } else {
+      alert("ভুল OTP!");
+      function verifyOtp() {
+  const userOtp = document.getElementById("reg-otp").value;
+  if (userOtp == generatedOtp) {
+    alert("OTP মিলেছে! 🎉");
+
+    // নতুন ইউজার আইডি তৈরি
+    let lastId = localStorage.getItem("lastUserId") || "BI19960000";
+    let nextIdNum = parseInt(lastId.slice(2)) + 1;
+    let newUserId = "BI" + nextIdNum.toString().padStart(8, "0");
+    localStorage.setItem("lastUserId", newUserId);
+
+    // ইউজার অবজেক্ট তৈরি
+    const user = {
+      name: document.getElementById("reg-name").value,
+      phone: document.getElementById("reg-phone").value,
+      email: document.getElementById("reg-email").value || "ইমেইল নেই",
+      age: document.getElementById("reg-age").value || "N/A",
+      password: document.getElementById("reg-password").value,
+      userID: newUserId,
+      balance: 0,
+      invest: 0
+    };
+
+    // localStorage-এ সেভ
+    localStorage.setItem("user", JSON.stringify(user));
+
+    // success message
+    document.getElementById("success-message").classList.remove("hidden");
+
+    showLogin();
+  } else {
+    alert("ভুল OTP!");
+  }
+}
+
+    }
+  }
+
+  function login() {
+    const phone = document.getElementById("login-phone").value;
+    const password = document.getElementById("login-password").value;
+
+    const storedPhone = localStorage.getItem("registeredPhone");
+    const storedPassword = localStorage.getItem("registeredPassword");
+
+    if (phone === storedPhone && password === storedPassword) {
+      alert("লগইন সফল ✅");
+      window.location.href = "home.html"; // আপনার ড্যাশবোর্ড বা হোম পেজ
+    } else {
+      alert("ভুল ফোন নম্বর বা পাসওয়ার্ড!");
+    }
+  }
+
+  function resetPassword() {
+    const phone = document.getElementById("forgot-phone").value;
+    const newPass = document.getElementById("new-password").value;
+    const confirmPass = document.getElementById("confirm-new-password").value;
+    const storedPhone = localStorage.getItem("registeredPhone");
+
+    if (phone !== storedPhone) {
+      alert("এই ফোন নম্বর রেজিস্টার্ড নয়!");
+      return;
+    }
+
+    if (newPass.length < 4 || newPass !== confirmPass) {
+      alert("পাসওয়ার্ড ৪ অক্ষরের বেশি হতে হবে এবং মিলতে হবে!");
+      return;
+    }
+
+    localStorage.setItem("registeredPassword", newPass);
+    alert("পাসওয়ার্ড রিসেট সফল ✅ এখন লগইন করুন!");
+    showLogin();
+  }
+</script>
+
+<style>
+  body {
+    background-image: url('images/login3.jpg'); /* নিজের ছবি এখানে বসাও */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+  }
+</style>
+
+</body>
+</html>
+
+
+</body>
+</html>

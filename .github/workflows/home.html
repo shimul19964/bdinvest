@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>BD AI App - Home</title>
+  <style>
+    body {
+      font-family: 'SolaimanLipi', sans-serif;
+      background-color: #f9faff;
+      padding: 20px;
+      max-width: 480px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .package {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .package img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .package h3 {
+      font-size: 16px;
+      margin: 5px 0;
+      color: #333;
+    }
+    .price {
+      color: green;
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .buy-btn {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .buy-btn:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+
+<h1>BD AI App</h1>
+
+<div class="grid-container">
+  <div class="package">
+    <img src="images/AI.jpeg" alt="Package 1">
+    <h3>AI Package 1</h3>
+    <p class="price">৳ 5,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 1', 5000)">Buy Now</button>
+  </div>
+  <div class="package">
+    <img src="images/AI2.jpeg" alt="Package 2">
+    <h3>AI Package 2</h3>
+    <p class="price">৳ 10,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 2', 10000)">Buy Now</button>
+  </div>
+
+  <div class="package">
+    <img src="images/S3.jpg" alt="Package 2">
+    <h3>AI Package 2</h3>
+    <p class="price">৳ 10,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 2', 10000)">Buy Now</button>
+  </div>
+  <div class="package">
+    <img src="images/AI3.jpg" alt="Package 2">
+    <h3>AI Package 2</h3>
+    <p class="price">৳ 10,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 2', 10000)">Buy Now</button>
+  </div>
+  <div class="package">
+    <img src="images/S3.jpg" alt="Package 2">
+    <h3>AI Package 2</h3>
+    <p class="price">৳ 10,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 2', 10000)">Buy Now</button>
+  </div>
+  <div class="package">
+    <img src="images/S4.jpg" alt="Package 2">
+    <h3>AI Package 2</h3>
+    <p class="price">৳ 10,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 2', 10000)">Buy Now</button>
+  </div>
+  <div class="package">
+    <img src="images/S4.jpg" alt="Package 2">
+    <h3>AI Package 2</h3>
+    <p class="price">৳ 10,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 2', 10000)">Buy Now</button>
+  </div>
+  <div class="package">
+    <img src="images/AI3.jpg" alt="Package 2">
+    <h3>AI Package 2</h3>
+    <p class="price">৳ 10,000</p>
+    <button class="buy-btn" onclick="buyPackage('AI Package 2', 10000)">Buy Now</button>
+  </div>
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+  <button onclick="goHome()" style="
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  ">
+    ⬅ হোমে ফিরে যান
+  </button>
+</div>
+
+<script>
+  function goHome() {
+    window.location.href = "main-home-page.html";
+  }
+</script>
+
+<style>
+  body {
+    background-image: url('images/020.png'); /* নিজের ছবি এখানে বসাও */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+  }
+</style>
+
+
+<script>
+  function buyPackage(name, price) {
+    const url = "payment.html?package=" + encodeURIComponent(name) + "&price=" + price;
+    window.location.href = url;
+  }
+</script>
+
+
+</body>
+</html>

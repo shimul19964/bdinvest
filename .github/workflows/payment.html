@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <title>পেমেন্ট পেজ</title>
+  <style>
+    body {
+      font-family: 'SolaimanLipi', sans-serif;
+      background-color: #f3f7ff;
+      padding: 20px;
+      max-width: 480px;
+      margin: auto;
+      background-image: url('images/020.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    h2 {
+      text-align: center;
+      color: white;
+    }
+    .details {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .details p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #0077cc;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+
+<h2>পেমেন্ট অপশন</h2>
+
+<div class="details">
+  <p><strong>প্যাকেজ:</strong> <span id="package-name">লোড হচ্ছে...</span></p>
+  <p><strong>মূল্য:</strong> <span id="package-price">৳0</span></p>
+
+  <label for="method">পেমেন্ট মাধ্যম নির্বাচন করুন:</label>
+  <select id="method">
+    <option value="">-- মাধ্যম বেছে নিন --</option>
+    <option value="Bank">Account Balance</option>
+  </select>
+
+  <button onclick="makePayment()">Buy Now</button>
+  <button onclick="goBack()" style="background-color: #555; margin-top: 10px;">⏪ আগের পেজে ফিরে যাও</button>
+</div>
+
+<script>
+  // URL থেকে প্যাকেজ নাম ও মূল্য আনো
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name') || 'AI প্যাকেজ';
+    const price = parseFloat(urlParams.get('price')) || 0;
+
+    document.getElementById('package-name').innerText = name;
+    document.getElementById('package-price').innerText = '৳' + price;
+  }
+
+  function makePayment() {
+    const method = document.getElementById('method').value;
+    const name = document.getElementById('package-name').innerText;
+    const priceText = document.getElementById('package-price').innerText.replace('৳', '');
+    const price = parseFloat(priceText);
+
+    if (!method) {
+      alert('পেমেন্ট মাধ্যম নির্বাচন করুন!');
+      return;
+    }
+
+    let investBalance = parseFloat(localStorage.getItem('investBalance')) || 0;
+
+    if (investBalance < price) {
+      alert('তোমার ইনভেস্ট ব্যালান্স পর্যাপ্ত নয়। দয়া করে টাকা যোগ করুন।');
+      return;
+    }
+
+    investBalance -= price;
+    localStorage.setItem('investBalance', investBalance.toFixed(2));
+
+    alert(`✅ আপনি "${name}" প্যাকেজটি ${method} মাধ্যমে সফলভাবে কিনেছেন!\n\nঅবশিষ্ট ব্যালান্স: ৳${investBalance.toFixed(2)}`);
+
+    window.location.href = 'main-home-page.html';
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+</script>
+
+</body>
+</html>
